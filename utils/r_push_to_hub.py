@@ -4,7 +4,7 @@ def parse_parameters():
     parser = argparse.ArgumentParser()
 
     # Push to Hub Parameters
-    parser.add_argument("--push_to_hub", type=bool, default=True)
+    parser.add_argument("--push_to_hub", type=bool, default=False)
     parser.add_argument("--hub_model_id", type=str, default=None)
     parser.add_argument("--hub_strategy", type=str, default=None)
     parser.add_argument("--hub_token", type=str, default=None)    
@@ -24,7 +24,8 @@ def parse_parameters():
 
     return args
 
-def push_to_hub(trainer, model_id):
+def push_to_hub(trainer, hub_args):
     # save best model, metrics and create model card
-    trainer.create_model_card(model_name=model_id)
-    trainer.push_to_hub()
+    if hub_args.push_to_hub:
+      trainer.create_model_card(model_name=hub_args.hub_model_id)
+      trainer.push_to_hub()
