@@ -1,6 +1,6 @@
 import argparse
 
-def parse_parameters():
+def parse_hf_hub():
     parser = argparse.ArgumentParser()
 
     # Push to Hub Parameters
@@ -24,8 +24,14 @@ def parse_parameters():
 
     return args
 
-def push_to_hub(trainer, hub_args):
+def push_to_hub(hub_args, trainer={}, model={}):
+    if not hub_args.push_to_hub:
+      return
+    
     # save best model, metrics and create model card
-    if hub_args.push_to_hub:
+    if trainer:
       trainer.create_model_card(model_name=hub_args.hub_model_id)
       trainer.push_to_hub()
+    elif model:
+      model.push_to_hub(hub_args.hub_model_id)
+    #   model.push_to_hub("xxx/xxxxx", use_auth_token=True)
